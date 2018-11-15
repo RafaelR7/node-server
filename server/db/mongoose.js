@@ -8,6 +8,6 @@ let db = {
   };
 
 mongoose.Promise = global.Promise;
-mongoose.connect(db.localhost || db.mlab), { useNewUrlParser: true };
+mongoose.connect( process.env.PORT ? db.mlab : db.localhost ), { useNewUrlParser: true };
 
 module.exports = { mongoose };
