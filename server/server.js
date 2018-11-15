@@ -9,6 +9,7 @@ const { User } = require('./models/user');
 var app = express();
 app.use(bodyParser.json());
 
+//INSERT
 const port = process.env.PORT || 3000;
 app.post('/todos', (req, res) => {
     var todo = new Todo({
@@ -22,7 +23,7 @@ app.post('/todos', (req, res) => {
     });
 });
 
-
+//GET ALL
 app.get('/todos', (req, res) => {
     Todo.find().then((todos) => {
         res.send({todos});
@@ -31,7 +32,7 @@ app.get('/todos', (req, res) => {
     });
 });
 
-
+//GET BY ID
 app.get('/todos/:id', (req, res) => {
     var id = req.params.id;
     if (!ObjectID.isValid(id)) {
@@ -42,7 +43,25 @@ app.get('/todos/:id', (req, res) => {
             return res.status(404).send();
         }
         res.send({todo})
-    }).catch((e) => console.log(e));
+    }).catch((e) => {
+        res.status(404).send();
+    });
+})
+
+//DELETE BY ID
+app.delete('/todos/:id', (req, res) => {
+    var id = req.params.id;
+    if (!ObjectID.isValid(id)) {
+        res.status(404).send();
+    }
+    Todo.findByIdAndRemove(id).then((todo) => {
+        if (!todo) {
+            return res.status(404).send();
+        }
+        res.send({todo})
+    }).catch((e) => {
+        res.status(404).send();
+    });
 })
 
 
